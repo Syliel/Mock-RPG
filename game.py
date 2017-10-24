@@ -47,10 +47,10 @@ def title_screen():
     title_screen_selections()
 
 def help_menu():
-    print("Use up, down, left right to move")
-    print("Type your commands to do them")
-    print("use look to inspect something")
-    print("Good luck and have fun!")
+    print("\n" + "Use up, down, left right to move")
+    print("\n" + "Type your commands to do them")
+    print("\n" + "Use look to inspect something")
+    print("\n" + "Good luck and have fun!")
     title_screen_selections()
 
 
@@ -125,7 +125,7 @@ zonemap = {'a1': {
            RIGHT: '',
            },
           'b1' :{
-           ZONENAME: "",
+           ZONENAME: '',
            DESCRIPTION: 'description',
            EXAMINATION: 'examine',
            SOLVED: False,
@@ -137,7 +137,7 @@ zonemap = {'a1': {
           'b2' :{
            ZONENAME: 'Home',
            DESCRIPTION: 'This is your home',
-           EXAMINATION: 'Your home looks the same - nothing has changed',
+           EXAMINATION: 'There\'s nothing to do here. Go out and explore!',
            SOLVED: False,
            UP: 'a2',
            DOWN: 'c2',
@@ -250,32 +250,29 @@ zonemap = {'a1': {
 
 ### GAME INTERACTIVITY ###
 def print_location():
-    if myPlayer.location == '':
-        print('You cannot go that direction. Try again!')
-    else:
         print('\n' + ('#' * (4 + len(myPlayer.location))))
-        print('# ' + myPlayer.location.upper() + ' #')
+        print('# ' + zonemap[myPlayer.location][ZONENAME] + ' #')
         print('# ' + zonemap[myPlayer.location][DESCRIPTION] + ' #')
         print('\n' + ('#' * (4 + len(myPlayer.location))))
 
 def prompt():
     print("\n" + "========================")
     print("What would you like to do?")
-    action = input("> ")
-    acceptable_actions = ['move', 'to', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look']
+    action = input("\n> ")
+    acceptable_actions = ['move', 'to', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'explore']
     while action.lower() not in acceptable_actions:
         print("Unknown action, try again. \n")
         action = input("> ")
     if action.lower() == 'quit':
         sys.exit()
-    elif action.lower() in ['move', 'go', 'travel', 'walk']:
+    elif action.lower() in ['move', 'go', 'travel', 'walk', 'explore']:
         player_move(action.lower())
     elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
         player_examine(action.lower())
 
 def player_move(myAction):
     ask = "Where would you like to move to?\n"
-    dest = input(ask)
+    dest = input(ask + "\n> ")
     if dest in ['up', 'north']:
         destination = zonemap[myPlayer.location][UP]
         movement_handler(destination)
@@ -294,17 +291,15 @@ def movement_handler(destination):
     if destination == '':
        print("\n" + "You cannot go that direction. Try again!")
     else:
-        print("\n" + "You have moved to the space " + destination + ".")
         myPlayer.location = destination
+        print("\n" + "You have moved to the " + zonemap[myPlayer.location][ZONENAME] + ".")
         print_location()
 
 def player_examine(action):
     if zonemap[myPlayer.location][SOLVED]:
         print("\n" + "You have already exhausted this zone.")
-    elif myPlayer.location == 'a2':
-        print("\n" + zonemap[myPlayer.location][EXAMINATION])
     else:
-        print("\n" + "You see a bridge")
+        print("\n" + zonemap[myPlayer.location][EXAMINATION])
 
 def main_game_loop():
     while myPlayer.game_over is False:
@@ -324,7 +319,7 @@ def setup_game():
     myPlayer.name = player_name
 
     question2 = "What role do you want to play?\n"
-    question2added = "(You can play as warrior, priest or mage)\n:"
+    question2added = "(You can play as warrior, priest or mage)\n"
     for character in question2:
         sys.stdout.write(character)
         sys.stdout.flush()
@@ -333,7 +328,7 @@ def setup_game():
         sys.stdout.write(character)
         sys.stdout.flush()
         time.sleep(0.01)
-    player_job = input("> ")
+    player_job = input("\n> ")
     valid_jobs = ['warrior', 'mage', 'priest']
     if player_job.lower() in valid_jobs:
         myPlayer.job = player_job
