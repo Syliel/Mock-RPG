@@ -5,12 +5,12 @@ import cmd, textwrap, sys, os, time, random
 screen_width = 100
 
 #Player setup
-class player:
+class Character(object):
     def __init__(self):
         self.name = ''
         self.job = ''
-        self.hp = 0
-        self.mp = 0
+        self.hp = 50
+        self.mp = 50
         self.attack = 10
         self.gold = 0
         self.pots = 0
@@ -18,7 +18,32 @@ class player:
         self.location = 'b2'
         self.game_over = False
 
-myPlayer = player()
+myPlayer = Character()
+
+
+class Warrior(Character):
+    def __init__(self):
+        Character.__init__(self)
+        self.hp *= 1.2
+        self.mp *= 0.8
+
+warrior = Warrior()
+
+class Mage(Character):
+    def __init__(self):
+        Character.__init__(self)
+        self.hp *= 0.5
+        self.mp *= 2.0
+
+mage = Mage()
+
+class Priest(Character):
+    def __init__(self):
+        Character.__init__(self)
+        self.hp *= 1
+        self.mp *= 1
+
+priest = Priest()
 
 class Goblin:
     def __init__(self, name):
@@ -372,21 +397,14 @@ def setup_game():
     if player_job.lower() in valid_jobs:
         myPlayer.job = player_job
         print('You are now a ' + player_job + '!\n')
+    if player_job.lower() == 'warrior':
+        print("Your HP and MP are " + str(warrior.hp) + " and " + str(warrior.mp) + '!\n')
+    elif player_job.lower() == 'mage':
+        print("Your HP and MP are " + str(mage.hp) + " and " + str(mage.mp) + '!\n')
+    elif player_job.lower() == 'priest':
+        print("Your HP and MP are " + str(priest.hp) + " and " +  str(priest.mp) + '!\n')
     while player_job.lower() not in valid_jobs:
         player_job = input("> ")
-        if player_job.lower() in valid_jobs:
-            myPlayer.job = player_job
-            print('You are now a ' + player_job + '!\n')
-    #Player stats
-    if myPlayer.job is 'warrior':
-        self.hp = 120
-        self.mp = 20
-    elif myPlayer.job is 'mage':
-        self.hp = 40
-        self.mp = 120
-    elif myPlayer.job is 'priest':
-        self.hp = 60
-        self.mp = 60
 
     #Introduction
     question3 = "Welcome, " + player_name + " the " + player_job + ".\n"
