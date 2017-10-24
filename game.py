@@ -11,6 +11,9 @@ class player:
         self.job = ''
         self.hp = 0
         self.mp = 0
+        self.attack = 10
+        self.gold = 0
+        self.pots = 0
         self.status_effects = []
         self.location = 'b2'
         self.game_over = False
@@ -86,8 +89,8 @@ solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
 
 zonemap = {'a1': {
            ZONENAME: 'Town Market',
-           DESCRIPTION: 'There are lots of delicious foods to eat',
-           EXAMINATION: 'You see fruits and bananas everywhere',
+           DESCRIPTION: 'There are lots of delicious foods to eat.',
+           EXAMINATION: 'You can sell and buy here.',
            SOLVED: False,
            UP: '',
            DOWN: 'b1',
@@ -125,9 +128,9 @@ zonemap = {'a1': {
            RIGHT: '',
            },
           'b1' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'West Fields',
+           DESCRIPTION: 'You see a goblin up ahead',
+           EXAMINATION: 'You can fight the goblin or run',
            SOLVED: False,
            UP: 'a1',
            DOWN: 'c1',
@@ -145,9 +148,9 @@ zonemap = {'a1': {
            RIGHT: 'b3',
            },
            'b3' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'East Fields',
+           DESCRIPTION: 'You see something shiny',
+           EXAMINATION: 'You pick up the shiny object. You gain 50 cp',
            SOLVED: False,
            UP: 'a3',
            DOWN: 'c3',
@@ -155,9 +158,9 @@ zonemap = {'a1': {
            RIGHT: 'b4',
            },
            'b4' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'Field\'s Edge',
+           DESCRIPTION: 'The edge of a vast field. You see something south.',
+           EXAMINATION: 'There\'s nothing here',
            SOLVED: False,
            UP: 'a4',
            DOWN: 'c4',
@@ -166,9 +169,9 @@ zonemap = {'a1': {
            },
 
            'c1' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'West Mountains',
+           DESCRIPTION: 'You see a goblin here.',
+           EXAMINATION: 'You can fight or run!',
            SOLVED: False,
            UP: 'b1',
            DOWN: 'd1',
@@ -176,9 +179,9 @@ zonemap = {'a1': {
            RIGHT: 'c2',
            },
            'c2' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'Mountains',
+           DESCRIPTION: 'These mountains are steep, but you feel you can go travese them.',
+           EXAMINATION: 'You see lots of snow, but nothing else.',
            SOLVED: False,
            UP: 'b2',
            DOWN: 'd2',
@@ -186,9 +189,9 @@ zonemap = {'a1': {
            RIGHT: 'c3',
            },
            'c3' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'East Mountains',
+           DESCRIPTION: 'You see something shiny here!',
+           EXAMINATION: 'You\'ve picked up 60 cp!',
            SOLVED: False,
            UP: 'b3',
            DOWN: 'd3',
@@ -196,9 +199,9 @@ zonemap = {'a1': {
            RIGHT: 'c4',
            },
            'c4' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'Mountains Edge',
+           DESCRIPTION: 'You see a bear here!',
+           EXAMINATION: 'You can fight the bear or run!',
            SOLVED: False,
            UP: 'b4',
            DOWN: 'd4',
@@ -206,9 +209,9 @@ zonemap = {'a1': {
            RIGHT: '',
            },
            'd1' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'West Village',
+           DESCRIPTION: 'This is the West Village',
+           EXAMINATION: 'Oddly, there\'s no townfolk around',
            SOLVED: False,
            UP: 'c1',
            DOWN: '',
@@ -216,9 +219,9 @@ zonemap = {'a1': {
            RIGHT: 'd2',
            },
            'd2' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'Village Center',
+           DESCRIPTION: 'You see one lady who seems to be going through her purse',
+           EXAMINATION: 'You talk to the lady, but she doesn\'t respond.',
            SOLVED: False,
            UP: 'c2',
            DOWN: '',
@@ -226,9 +229,9 @@ zonemap = {'a1': {
            RIGHT: 'd3',
            },
            'd3' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'East Village',
+           DESCRIPTION: 'You see something shiny!',
+           EXAMINATION: 'You\'ve picked up 30 cp!',
            SOLVED: False,
            UP: 'c3',
            DOWN: '',
@@ -236,9 +239,9 @@ zonemap = {'a1': {
            RIGHT: 'd4',
            },
            'd4' :{
-           ZONENAME: '',
-           DESCRIPTION: 'description',
-           EXAMINATION: 'examine',
+           ZONENAME: 'Village Edge',
+           DESCRIPTION: 'This is the end of the village.',
+           EXAMINATION: 'You see nothing ahead of you.',
            SOLVED: False,
            UP: 'c4',
            DOWN: '',
