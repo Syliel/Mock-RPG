@@ -20,6 +20,25 @@ class player:
 
 myPlayer = player()
 
+class Goblin:
+    def __init__(self, name):
+        self.name = name
+        self.hp = 30
+        self.attack = 10
+        self.cpgain = 100
+
+GoblinIG = Goblin("Goblin")
+
+class Bear:
+    def __init__(self, name):
+        self.name = name
+        self.hp = 100
+        self.attack = 20
+        self.cpgain = 150
+
+BearIG = Bear("Bear")
+
+
 ####Title Screen####
 def title_screen_selections():
     option = input("> ")
@@ -129,7 +148,7 @@ zonemap = {'a1': {
            },
           'b1' :{
            ZONENAME: 'West Fields',
-           DESCRIPTION: 'You see a goblin up ahead',
+           DESCRIPTION: 'You see an enemy ahead!',
            EXAMINATION: 'You can fight the goblin or run',
            SOLVED: False,
            UP: 'a1',
@@ -170,7 +189,7 @@ zonemap = {'a1': {
 
            'c1' :{
            ZONENAME: 'West Mountains',
-           DESCRIPTION: 'You see a goblin here.',
+           DESCRIPTION: 'You see something to fight.',
            EXAMINATION: 'You can fight or run!',
            SOLVED: False,
            UP: 'b1',
@@ -200,8 +219,8 @@ zonemap = {'a1': {
            },
            'c4' :{
            ZONENAME: 'Mountains Edge',
-           DESCRIPTION: 'You see a bear here!',
-           EXAMINATION: 'You can fight the bear or run!',
+           DESCRIPTION: 'You see something up ahead!',
+           EXAMINATION: 'You can fight or run!',
            SOLVED: False,
            UP: 'b4',
            DOWN: 'd4',
@@ -262,7 +281,7 @@ def prompt():
     print("\n" + "========================")
     print("What would you like to do?")
     action = input("\n> ")
-    acceptable_actions = ['move', 'to', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'explore']
+    acceptable_actions = ['move', 'to', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'explore', 'fight', 'run']
     while action.lower() not in acceptable_actions:
         print("Unknown action, try again. \n")
         action = input("> ")
@@ -272,6 +291,8 @@ def prompt():
         player_move(action.lower())
     elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
         player_examine(action.lower())
+    elif action.lower() in ['fight']:
+        player_prefight(action.lower())
 
 def player_move(myAction):
     ask = "Where would you like to move to?\n"
@@ -303,6 +324,21 @@ def player_examine(action):
         print("\n" + "You have already exhausted this zone.")
     else:
         print("\n" + zonemap[myPlayer.location][EXAMINATION])
+
+def player_prefight(action):
+    global enemy
+    enemynum = random.randint(1, 2)
+    if enemynum == 1:
+        enemy = GoblinIG
+    else:
+        enemy = BearIG
+    fight()
+
+def fight():
+    print("%s     vs     %s" % (myPlayer.name, enemy.name))
+
+
+
 
 def main_game_loop():
     while myPlayer.game_over is False:
