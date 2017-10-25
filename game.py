@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Python Text RPG by Me
-import cmd, textwrap, sys, os, time, random
+import cmd, textwrap, sys, os, time, random, zonemap
 
 screen_width = 100
 
@@ -131,175 +131,12 @@ solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
                  'd1': False, 'd2': False, 'd3': False, 'd4': False
                  }
 
-zonemap = {'a1': {
-           ZONENAME: 'Town Market',
-           DESCRIPTION: 'There are lots of delicious foods to eat.',
-           EXAMINATION: 'You can sell and buy here.',
-           SOLVED: False,
-           UP: '',
-           DOWN: 'b1',
-           LEFT: '',
-           RIGHT: 'a2',
-           },
-           'a2': {
-           ZONENAME: 'Town Entrance',
-           DESCRIPTION: 'There\'s a massive door that leads to the town.',
-           EXAMINATION: 'You see guards and a town ahead.',
-           SOLVED: False,
-           UP: '',
-           DOWN: 'b2',
-           LEFT: 'a1',
-           RIGHT: 'a3',
-           },
-           'a3' :{
-           ZONENAME: 'Town Square',
-           DESCRIPTION: 'There\'s a festival today!',
-           EXAMINATION: 'You see balloons and kids running around.',
-           SOLVED: False,
-           UP: '',
-           DOWN: 'b3',
-           LEFT: 'a2',
-           RIGHT: 'a4',
-           },
-           'a4' :{
-           ZONENAME: 'Town Hall',
-           DESCRIPTION: 'This is Town Hall.',
-           EXAMINATION: 'You see the Town Hall',
-           SOLVED: False,
-           UP: '',
-           DOWN: 'b4',
-           LEFT: 'a3',
-           RIGHT: '',
-           },
-          'b1' :{
-           ZONENAME: 'West Fields',
-           DESCRIPTION: 'You see an enemy ahead!',
-           EXAMINATION: 'You can fight the goblin or run',
-           SOLVED: False,
-           UP: 'a1',
-           DOWN: 'c1',
-           LEFT: '',
-           RIGHT: 'b2',
-           },
-          'b2' :{
-           ZONENAME: 'Home',
-           DESCRIPTION: 'This is your home',
-           EXAMINATION: 'There\'s nothing to do here. Go out and explore!',
-           SOLVED: False,
-           UP: 'a2',
-           DOWN: 'c2',
-           LEFT: 'b1',
-           RIGHT: 'b3',
-           },
-           'b3' :{
-           ZONENAME: 'East Fields',
-           DESCRIPTION: 'You see something shiny',
-           EXAMINATION: 'You pick up the shiny object. You gain 50 cp',
-           SOLVED: False,
-           UP: 'a3',
-           DOWN: 'c3',
-           LEFT: 'b2',
-           RIGHT: 'b4',
-           },
-           'b4' :{
-           ZONENAME: 'Field\'s Edge',
-           DESCRIPTION: 'The edge of a vast field. You see something south.',
-           EXAMINATION: 'There\'s nothing here',
-           SOLVED: False,
-           UP: 'a4',
-           DOWN: 'c4',
-           LEFT: 'b3',
-           RIGHT: '',
-           },
-
-           'c1' :{
-           ZONENAME: 'West Mountains',
-           DESCRIPTION: 'You see something to fight.',
-           EXAMINATION: 'You can fight or run!',
-           SOLVED: False,
-           UP: 'b1',
-           DOWN: 'd1',
-           LEFT: '',
-           RIGHT: 'c2',
-           },
-           'c2' :{
-           ZONENAME: 'Mountains',
-           DESCRIPTION: 'These mountains are steep, but you feel you can go travese them.',
-           EXAMINATION: 'You see lots of snow, but nothing else.',
-           SOLVED: False,
-           UP: 'b2',
-           DOWN: 'd2',
-           LEFT: 'c1',
-           RIGHT: 'c3',
-           },
-           'c3' :{
-           ZONENAME: 'East Mountains',
-           DESCRIPTION: 'You see something shiny here!',
-           EXAMINATION: 'You\'ve picked up 60 cp!',
-           SOLVED: False,
-           UP: 'b3',
-           DOWN: 'd3',
-           LEFT: 'c2',
-           RIGHT: 'c4',
-           },
-           'c4' :{
-           ZONENAME: 'Mountains Edge',
-           DESCRIPTION: 'You see something up ahead!',
-           EXAMINATION: 'You can fight or run!',
-           SOLVED: False,
-           UP: 'b4',
-           DOWN: 'd4',
-           LEFT: 'c3',
-           RIGHT: '',
-           },
-           'd1' :{
-           ZONENAME: 'West Village',
-           DESCRIPTION: 'This is the West Village',
-           EXAMINATION: 'Oddly, there\'s no townfolk around',
-           SOLVED: False,
-           UP: 'c1',
-           DOWN: '',
-           LEFT: '',
-           RIGHT: 'd2',
-           },
-           'd2' :{
-           ZONENAME: 'Village Center',
-           DESCRIPTION: 'You see one lady who seems to be going through her purse',
-           EXAMINATION: 'You talk to the lady, but she doesn\'t respond.',
-           SOLVED: False,
-           UP: 'c2',
-           DOWN: '',
-           LEFT: 'd1',
-           RIGHT: 'd3',
-           },
-           'd3' :{
-           ZONENAME: 'East Village',
-           DESCRIPTION: 'You see something shiny!',
-           EXAMINATION: 'You\'ve picked up 30 cp!',
-           SOLVED: False,
-           UP: 'c3',
-           DOWN: '',
-           LEFT: 'd2',
-           RIGHT: 'd4',
-           },
-           'd4' :{
-           ZONENAME: 'Village Edge',
-           DESCRIPTION: 'This is the end of the village.',
-           EXAMINATION: 'You see nothing ahead of you.',
-           SOLVED: False,
-           UP: 'c4',
-           DOWN: '',
-           LEFT: 'd3',
-           RIGHT: '',
-           },
-
-   }
 
 ### GAME INTERACTIVITY ###
 def print_location():
         print('\n' + ('#' * (4 + len(myPlayer.location))))
-        print('# ' + zonemap[myPlayer.location][ZONENAME] + ' #')
-        print('# ' + zonemap[myPlayer.location][DESCRIPTION] + ' #')
+        print('# ' + zonemap.zonemap[myPlayer.location][ZONENAME] + ' #')
+        print('# ' + zonemap.zonemap[myPlayer.location][DESCRIPTION] + ' #')
         print('\n' + ('#' * (4 + len(myPlayer.location))))
 
 def prompt():
@@ -323,16 +160,16 @@ def player_move(myAction):
     ask = "Where would you like to move to?\n"
     dest = input(ask + "\n> ")
     if dest in ['up', 'north']:
-        destination = zonemap[myPlayer.location][UP]
+        destination = zonemap.zonemap[myPlayer.location][UP]
         movement_handler(destination)
     elif dest in ['left', 'west']:
-        destination = zonemap[myPlayer.location][LEFT]
+        destination = zonemap.zonemap[myPlayer.location][LEFT]
         movement_handler(destination)
     elif dest in ['right', 'east']:
-        destination = zonemap[myPlayer.location][RIGHT]
+        destination = zonemap.zonemap[myPlayer.location][RIGHT]
         movement_handler(destination)
     elif dest in ['down', 'south']:
-        destination = zonemap[myPlayer.location][DOWN]
+        destination = zonemap.zonemap[myPlayer.location][DOWN]
         movement_handler(destination)
 
 
@@ -341,14 +178,14 @@ def movement_handler(destination):
        print("\n" + "You cannot go that direction. Try again!")
     else:
         myPlayer.location = destination
-        print("\n" + "You have moved to the " + zonemap[myPlayer.location][ZONENAME] + ".")
+        print("\n" + "You have moved to the " + zonemap.zonemap[myPlayer.location][ZONENAME] + ".")
         print_location()
 
 def player_examine(action):
-    if zonemap[myPlayer.location][SOLVED]:
+    if zonemap.zonemap[myPlayer.location][SOLVED]:
         print("\n" + "You have already exhausted this zone.")
     else:
-        print("\n" + zonemap[myPlayer.location][EXAMINATION])
+        print("\n" + zonemap.zonemap[myPlayer.location][EXAMINATION])
 
 def player_prefight(action):
     global enemy
