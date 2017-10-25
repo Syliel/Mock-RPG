@@ -223,20 +223,20 @@ def setup_game():
         time.sleep(0.01)
     player_job = input("\n> ")
     valid_jobs = ['warrior', 'mage', 'priest']
-    if player_job == 'warrior':
+    if player_job.lower() == 'warrior':
         myPlayer.job = Warrior()
         myPlayer.hp = warrior.hp
         myPlayer.mp = warrior.mp
-    if player_job == 'mage':
+    if player_job.lower() == 'mage':
         myPlayer.job = Mage()
         myPlayer.hp = mage.hp
         myPlayer.mp = mage.mp
-    if player_job == 'priest':
+    if player_job.lower() == 'priest':
         myPlayer.job = Priest()
         myPlayer.hp = priest.hp
         myPlayer.mp = priest.mp
     print("Your are now a " + str(player_job) + "." + "Your HP and MP are " + str(myPlayer.hp) + " and " + str(myPlayer.mp) + '!\n')
-    while player_job not in valid_jobs:
+    while player_job.lower() not in valid_jobs:
         player_job = input("> ")
 
     #Introduction
