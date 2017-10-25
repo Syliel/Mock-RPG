@@ -24,7 +24,7 @@ myPlayer = Character()
 class Warrior(Character):
     def __init__(self):
         Character.__init__(self)
-        self.hp *= 1.2
+        self.hp *= 2.0
         self.mp *= 0.8
 
 warrior = Warrior()
@@ -116,14 +116,6 @@ def help_menu():
     ---------------
 """
 
-ZONENAME = ''
-DESCRIPTION = 'description'
-EXAMINATION = 'examine'
-SOLVED = False
-UP = 'up', 'north'
-DOWN = 'down', 'south'
-LEFT = 'left', 'west'
-RIGHT = 'right', 'east'
 
 solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
                  'b1': False, 'b2': False, 'b3': False, 'b4': False,
@@ -135,8 +127,8 @@ solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
 ### GAME INTERACTIVITY ###
 def print_location():
         print('\n' + ('#' * (4 + len(myPlayer.location))))
-        print('# ' + zonemap.zonemap[myPlayer.location][ZONENAME] + ' #')
-        print('# ' + zonemap.zonemap[myPlayer.location][DESCRIPTION] + ' #')
+        print('# ' + zonemap.zonemap[myPlayer.location]["ZONENAME"] + ' #')
+        print('# ' + zonemap.zonemap[myPlayer.location]["DESCRIPTION"] + ' #')
         print('\n' + ('#' * (4 + len(myPlayer.location))))
 
 def prompt():
@@ -160,16 +152,16 @@ def player_move(myAction):
     ask = "Where would you like to move to?\n"
     dest = input(ask + "\n> ")
     if dest in ['up', 'north']:
-        destination = zonemap.zonemap[myPlayer.location][UP]
+        destination = zonemap.zonemap[myPlayer.location]["UP"]
         movement_handler(destination)
     elif dest in ['left', 'west']:
-        destination = zonemap.zonemap[myPlayer.location][LEFT]
+        destination = zonemap.zonemap[myPlayer.location]["LEFT"]
         movement_handler(destination)
     elif dest in ['right', 'east']:
-        destination = zonemap.zonemap[myPlayer.location][RIGHT]
+        destination = zonemap.zonemap[myPlayer.location]["RIGHT"]
         movement_handler(destination)
     elif dest in ['down', 'south']:
-        destination = zonemap.zonemap[myPlayer.location][DOWN]
+        destination = zonemap.zonemap[myPlayer.location]["DOWN"]
         movement_handler(destination)
 
 
@@ -178,14 +170,14 @@ def movement_handler(destination):
        print("\n" + "You cannot go that direction. Try again!")
     else:
         myPlayer.location = destination
-        print("\n" + "You have moved to the " + zonemap.zonemap[myPlayer.location][ZONENAME] + ".")
+        print("\n" + "You have moved to the " + zonemap.zonemap[myPlayer.location]["ZONENAME"] + ".")
         print_location()
 
 def player_examine(action):
-    if zonemap.zonemap[myPlayer.location][SOLVED]:
+    if zonemap.zonemap[myPlayer.location]["SOLVED"]:
         print("\n" + "You have already exhausted this zone.")
     else:
-        print("\n" + zonemap.zonemap[myPlayer.location][EXAMINATION])
+        print("\n" + zonemap.zonemap[myPlayer.location]["EXAMINATION"])
 
 def player_prefight(action):
     global enemy
@@ -231,15 +223,19 @@ def setup_game():
         time.sleep(0.01)
     player_job = input("\n> ")
     valid_jobs = ['warrior', 'mage', 'priest']
-    if player_job in valid_jobs:
-        myPlayer.job = player_job
     if player_job == 'warrior':
-        player_job = Warrior()
+        myPlayer.job = Warrior()
+        myPlayer.hp = warrior.hp
+        myPlayer.mp = warrior.mp
     if player_job == 'mage':
-        player_job = Mage()
+        myPlayer.job = Mage()
+        myPlayer.hp = mage.hp
+        myPlayer.mp = mage.mp
     if player_job == 'priest':
-        player_job = Priest()
-    print("Your are now a " + str(myPlayer.job) + "." + "Your HP and MP are " + str(myPlayer.mp) + str(myPlayer.hp) + '!\n')
+        myPlayer.job = Priest()
+        myPlayer.hp = priest.hp
+        myPlayer.mp = priest.mp
+    print("Your are now a " + str(player_job) + "." + "Your HP and MP are " + str(myPlayer.hp) + " and " + str(myPlayer.mp) + '!\n')
     while player_job not in valid_jobs:
         player_job = input("> ")
 
