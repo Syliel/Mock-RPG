@@ -77,7 +77,7 @@ def title_screen_selections():
         print("Please enter a valid command.")
         option = input("> ")
         if option.lower() == ("play"):
-            start_game()
+            setup_game()
         elif option.lower() == ("help"):
             help_menu()
         elif option.lower () == ("quit"):
@@ -147,7 +147,7 @@ def prompt():
     elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
         player_examine(action.lower())
     elif action.lower() in ['fight']:
-        player_prefight(action.lower())
+        fight()
 
 def player_move(myAction):
     ask = "Where would you like to move to?\n"
@@ -179,38 +179,6 @@ def player_examine(action):
         print("\n" + "You have already exhausted this zone.")
     else:
         print("\n" + zonemap.zonemap[myPlayer.location]["EXAMINATION"])
-
-def player_prefight(action):
-    global enemy
-    enemynum = random.randint(1, 2)
-    if enemynum == 1:
-        enemy = GoblinIG
-    else:
-        enemy = BearIG
-    fight()
-
-def fight():
-    os.system('clear')
-    print("%s     vs     %s" % (player_name, enemy.name))
-    Pattack = random.randint(0, myPlayer.attack)
-    Eattack = random.randint(0, enemy.attack)
-    if Pattack == 0:
-        print("You missed")
-    else:
-        print("You hit the monster for " + str(myPlayer.attack) + "damage")
-        enemy.hp -= myPlayer.attack
-    if Eattack == 0:
-        print("The enemy missed")
-    else:
-        print("The monster hit for " + str(enemy.attack) + "damage")
-        myPlayer.hp -= enemy.attack
-    if myPlayer.hp <= 0:
-        print("You lose.")
-    if enemy.hp <= 0:
-        print("You win the fight")
-        main_game_loop()
-
-
 
 
 
@@ -291,5 +259,34 @@ def setup_game():
     print("###################")
     main_game_loop()
 
+def fight():
+    global myPlayer
+    global enemy
+    enemynum = random.randint(1, 2)
+    if enemynum == 1:
+        enemy = GoblinIG
+    else:
+        enemy = BearIG
+    os.system('clear')
+    print("%s     vs     %s" % (player_name, enemy.name))
+    Pattack = random.randint(0, myPlayer.attack)
+    Eattack = random.randint(0, enemy.attack)
+    if Pattack == 0:
+        print("You missed")
+    else:
+        print("You hit the monster for " + str(myPlayer.attack) + "damage")
+        enemy.hp -= myPlayer.attack
+    if Eattack == 0:
+        print("The enemy missed")
+    else:
+        print("The monster hit for " + str(enemy.attack) + "damage")
+        myPlayer.hp -= enemy.attack
+    while myPlayer.hp > 0:
+        fight()
+    if myPlayer.hp <= 0:
+        print("You lose.")
+    if enemy.hp <= 0:
+        print("You win the fight")
+        main_game_loop()
 
 title_screen()
