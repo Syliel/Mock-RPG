@@ -296,7 +296,18 @@ def attack():
         title_screen()
     elif enemy.hp <= 0:
         print("You have won the fight!")
-        main_game_loop()
+        reset()
+
+def reset():
+    global enemy
+    enemynum = random.randint(1, 2)
+    if enemynum == 1:
+        enemy = GoblinIG
+    else:
+        enemy = BearIG
+
+
+
 def run():
     print("You have run away from the enemy")
     main_game_loop()
