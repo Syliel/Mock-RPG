@@ -3,13 +3,13 @@
 import cmd, textwrap, sys, os, time, random, zonemap
 
 screen_width = 100
-go = True
+
 #Player setup
 class Character(object):
     def __init__(self):
         self.name = ''
         self.job = ''
-        self.hp = 0
+        self.hp = 200
         self.mp = 0
         self.attack = 10
         self.gold = 60
@@ -192,27 +192,25 @@ def player_prefight(action):
 def fight():
     os.system('clear')
     print("%s     vs     %s" % (player_name, enemy.name))
-    global go
     Pattack = random.randint(0, myPlayer.attack)
     Eattack = random.randint(0, enemy.attack)
-    while go == True:
-        if Pattack == 0:
-            print("You missed")
-        else:
-            print("You hit the monster for " + str(myPlayer.attack) + "damage")
-        if Eattack == 0:
-            print("The enemy missed")
-        else:
-            print("The monster hit for " + str(enemy.attack) + "damage")
-        print("Do you want to keep fighting or run?")
-        option = input("> ")
-        if option == 'fight':
-            fight()
-        if myPlayer.hp <= 0:
-            go == False
-            main_game_loop()
-        if enemy.hp <= 0:
-            go == False
+    if Pattack == 0:
+        print("You missed")
+    else:
+        print("You hit the monster for " + str(myPlayer.attack) + "damage")
+        enemy.hp -= myPlayer.attack
+    if Eattack == 0:
+        print("The enemy missed")
+    else:
+        print("The monster hit for " + str(enemy.attack) + "damage")
+        myPlayer.hp -= enemy.attack
+    if myPlayer.hp <= 0:
+        print("You lose.")
+    if enemy.hp <= 0:
+        print("You win the fight")
+        main_game_loop()
+
+
 
 
 
@@ -223,7 +221,6 @@ def main_game_loop():
 
 def setup_game():
     global player_name
-    global myPlayer
     os.system('clear')
 
     ### Name Collecting###
@@ -254,7 +251,7 @@ def setup_game():
     if player_job.lower() == 'priest':
         myPlayer = Priest()
     print("Your are now a " + str(player_job) + "." + " Your HP and MP are " + str(myPlayer.hp) + " and " + str(myPlayer.mp) + '!\n')
-    print("You have " + str(myPlayer.gold) + 'gold!\n')
+    print("You have " + str(myPlayer.gold) + ' gold!\n')
     while player_job.lower() not in valid_jobs:
         player_job = input("> ")
 
