@@ -189,6 +189,7 @@ def main_game_loop():
 
 def setup_game():
     global player_name
+    global myPlayer
     os.system('clear')
 
     ### Name Collecting###
@@ -260,33 +261,48 @@ def setup_game():
     main_game_loop()
 
 def fight():
-    global myPlayer
     global enemy
     enemynum = random.randint(1, 2)
     if enemynum == 1:
         enemy = GoblinIG
     else:
         enemy = BearIG
-    os.system('clear')
-    print("%s     vs     %s" % (player_name, enemy.name))
-    Pattack = random.randint(0, myPlayer.attack)
-    Eattack = random.randint(0, enemy.attack)
-    if Pattack == 0:
-        print("You missed")
+    print("You\'re fighting a " + str(enemy.name) + "! You can attack or run!")
+    option = input("> ")
+    if option == 'attack':
+        attack()
     else:
-        print("You hit the monster for " + str(myPlayer.attack) + "damage")
+        run()
+
+def attack():
+    while myPlayer.hp and enemy.hp >0 :
+        print("The enemy has " + str(enemy.hp) + " and your HP is " + str(myPlayer.hp))
+        pAttack = random.randint(0, myPlayer.attack)
+        eAttack = random.randint(0, enemy.attack)
+        if pAttack == 0:
+            print("You missed")
+        else:
+            print("You hit the moster for " + str(myPlayer.attack) + "damage")
         enemy.hp -= myPlayer.attack
-    if Eattack == 0:
-        print("The enemy missed")
-    else:
-        print("The monster hit for " + str(enemy.attack) + "damage")
+        print("The enemy hp is now " + str(enemy.hp))
+        if eAttack == 0:
+            print("The monster missed!")
+        else:
+            print("The monster hit for " + str(enemy.attack) + "damage")
         myPlayer.hp -= enemy.attack
-    while myPlayer.hp > 0:
-        fight()
+        print("Your health is now " + str(myPlayer.hp))
     if myPlayer.hp <= 0:
-        print("You lose.")
-    if enemy.hp <= 0:
-        print("You win the fight")
+        print("You lost the game")
+        title_screen()
+    elif enemy.hp <= 0:
+        print("You have won the fight!")
         main_game_loop()
+def run():
+    print("You have run away from the enemy")
+    main_game_loop()
+
+
+
+
 
 title_screen()
