@@ -3,16 +3,16 @@
 import cmd, textwrap, sys, os, time, random, zonemap
 
 screen_width = 100
-
+go = True
 #Player setup
 class Character(object):
     def __init__(self):
         self.name = ''
         self.job = ''
-        self.hp = 50
-        self.mp = 50
+        self.hp = 0
+        self.mp = 0
         self.attack = 10
-        self.gold = 0
+        self.gold = 60
         self.pots = 0
         self.status_effects = []
         self.location = 'b2'
@@ -24,32 +24,32 @@ myPlayer = Character()
 class Warrior(Character):
     def __init__(self):
         Character.__init__(self)
-        self.hp *= 2.0
-        self.mp *= 0.8
+        self.hp += 100
+        self.mp += 50
 
 warrior = Warrior()
 
 class Mage(Character):
     def __init__(self):
         Character.__init__(self)
-        self.hp *= 0.5
-        self.mp *= 2.0
+        self.hp += 60
+        self.mp += 100
 
 mage = Mage()
 
 class Priest(Character):
     def __init__(self):
         Character.__init__(self)
-        self.hp *= 1
-        self.mp *= 1
+        self.hp += 50
+        self.mp += 50
 
 priest = Priest()
 
 class Goblin:
     def __init__(self, name):
         self.name = name
-        self.hp = 30
-        self.attack = 10
+        self.hp = 50
+        self.attack = 5
         self.cpgain = 100
 
 GoblinIG = Goblin("Goblin")
@@ -57,8 +57,8 @@ GoblinIG = Goblin("Goblin")
 class Bear:
     def __init__(self, name):
         self.name = name
-        self.hp = 100
-        self.attack = 20
+        self.hp = 70
+        self.attack = 10
         self.cpgain = 150
 
 BearIG = Bear("Bear")
@@ -94,6 +94,7 @@ def title_screen():
     title_screen_selections()
 
 def help_menu():
+    os.system('clear')
     print("\n" + "Use up, down, left right to move")
     print("\n" + "Type your commands to do them")
     print("\n" + "Use look to inspect something")
@@ -189,8 +190,29 @@ def player_prefight(action):
     fight()
 
 def fight():
-    print("%s     vs     %s" % (myPlayer.name, enemy.name))
-
+    os.system('clear')
+    print("%s     vs     %s" % (player_name, enemy.name))
+    global go
+    Pattack = random.randint(0, myPlayer.attack)
+    Eattack = random.randint(0, enemy.attack)
+    while go == True:
+        if Pattack == 0:
+            print("You missed")
+        else:
+            print("You hit the monster for " + str(myPlayer.attack) + "damage")
+        if Eattack == 0:
+            print("The enemy missed")
+        else:
+            print("The monster hit for " + str(enemy.attack) + "damage")
+        print("Do you want to keep fighting or run?")
+        option = input("> ")
+        if option == 'fight':
+            fight()
+        if myPlayer.hp <= 0:
+            go == False
+            main_game_loop()
+        if enemy.hp <= 0:
+            go == False
 
 
 
@@ -200,6 +222,8 @@ def main_game_loop():
         #here handle if puzzles have been solved, boss defeated.
 
 def setup_game():
+    global player_name
+    global myPlayer
     os.system('clear')
 
     ### Name Collecting###
@@ -209,7 +233,7 @@ def setup_game():
         sys.stdout.flush()
         time.sleep(0.05)
     player_name = input("> ")
-    myPlayer.name = player_name
+
 
     question2 = "What role do you want to play?\n"
     question2added = "(You can play as warrior, priest or mage)\n"
@@ -224,23 +248,19 @@ def setup_game():
     player_job = input("\n> ")
     valid_jobs = ['warrior', 'mage', 'priest']
     if player_job.lower() == 'warrior':
-        myPlayer.job = Warrior()
-        myPlayer.hp = warrior.hp
-        myPlayer.mp = warrior.mp
+        myPlayer = Warrior()
     if player_job.lower() == 'mage':
-        myPlayer.job = Mage()
-        myPlayer.hp = mage.hp
-        myPlayer.mp = mage.mp
+        myPlayer = Mage()
     if player_job.lower() == 'priest':
-        myPlayer.job = Priest()
-        myPlayer.hp = priest.hp
-        myPlayer.mp = priest.mp
-    print("Your are now a " + str(player_job) + "." + "Your HP and MP are " + str(myPlayer.hp) + " and " + str(myPlayer.mp) + '!\n')
+        myPlayer = Priest()
+    print("Your are now a " + str(player_job) + "." + " Your HP and MP are " + str(myPlayer.hp) + " and " + str(myPlayer.mp) + '!\n')
+    print("You have " + str(myPlayer.gold) + 'gold!\n')
     while player_job.lower() not in valid_jobs:
         player_job = input("> ")
 
+
     #Introduction
-    question3 = "Welcome, " + player_name + " the " + player_job + ".\n"
+    question3 = "\n Hello, " + player_name + " the " + player_job + ".\n"
     for character in question3:
         sys.stdout.write(character)
         sys.stdout.flush()
@@ -273,7 +293,6 @@ def setup_game():
     print("# Let's start now #")
     print("###################")
     main_game_loop()
-
 
 
 title_screen()
