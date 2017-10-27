@@ -264,9 +264,9 @@ def fight():
     global enemy
     enemynum = random.randint(1, 2)
     if enemynum == 1:
-        enemy = GoblinIG
+        enemy = Goblin("Goblin")
     else:
-        enemy = BearIG
+        enemy = Bear("Bear")
     print("You\'re fighting a " + str(enemy.name) + "! You can attack or run!")
     option = input("> ")
     if option == 'attack':
@@ -296,15 +296,6 @@ def attack():
         title_screen()
     elif enemy.hp <= 0:
         print("You have won the fight!")
-        reset()
-
-def reset():
-    global enemy
-    enemynum = random.randint(1, 2)
-    if enemynum == 1:
-        enemy = GoblinIG
-    else:
-        enemy = BearIG
 
 
 
